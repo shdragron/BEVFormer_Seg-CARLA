@@ -73,18 +73,6 @@ class CarlaSegDataset(Dataset):
         g = ((arr >> VEH_BIT) & 1).astype(np.uint8)          # bit4 = vehicle
         return g[::-1, ::-1].T.copy()                        # -> BEVFormer grid
 
-    def _gt_mask(self, scene, fr):
-        """Visibility-filtered GT, 3DOD-style: keep only vehicle cells with
-        visibility>=min_visibility; low-vis vehicles become background (so a
-        prediction there is a false positive, exactly like the detection
-        models' visibility>=2 GT removal). Returned in the BEVFormer grid."""
-        from PIL import Image
-        arr = np.array(Image.open(os.path.join(self.labels_dir, scene, fr['bev'])))
-        veh = ((arr >> VEH_BIT) & 1).astype(np.uint8)        # bit4 = vehicle
-        vis = np.array(Image.open(os.path.join(self.labels_dir, scene, fr['visibility'])))
-        veh = veh & (vis >= self.min_visibility).astype(np.uint8)
-        return veh[::-1, ::-1].T.copy()                      # -> BEVFormer grid
-
     def get_data_info(self, index):
         scene, fi, fr = self.frames[index]
         l2i = []
