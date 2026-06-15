@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.pth
+*.pkl
+*.log
+work_dirs/
+data/
+wandb/
+*.egg-info/
+.ipynb_checkpoints/
